@@ -2,10 +2,6 @@ name: go test
 description: "Runs go test, coverage etc."
 on:
   workflow_call:
-  workflow_dispatch:
-  push:
-    branches:
-      - master
 jobs:
   build:
     runs-on: ubuntu-latest
