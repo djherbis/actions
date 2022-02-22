@@ -1,4 +1,5 @@
 name: go test
+description: "Runs go test, coverage etc."
 on:
   workflow_call:
   workflow_dispatch:
