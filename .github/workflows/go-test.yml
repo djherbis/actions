@@ -1,6 +1,10 @@
 name: go test
 on:
   workflow_call:
+    inputs:
+      coveralls_parallel:
+        type: boolean
+        default: false
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,6 +20,7 @@ jobs:
       - run: go test -v -race -covermode atomic -coverprofile=covprofile ./...
       - name: Send coverage
         env:
+          COVERALLS_PARALLEL: ${{ inputs.coveralls_parallel }}
           COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           go install github.com/mattn/goveralls@latest
