@@ -5,27 +5,11 @@ on:
       coveralls_parallel:
         type: boolean
         default: false
-      runs-on:
-        type: string
-        default: ubuntu-latest
 jobs:
   build:
-    runs-on: ${{ inputs.runs-on }}
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-go@v2
+        uses: djherbis/actions/go-test@main
         with:
-          go-version: '1.17.x'
-      - run: "go vet ./..."
-      - run: |
-          go install honnef.co/go/tools/cmd/staticcheck@latest
-          staticcheck ./...    
-      - run: go test -v -race -covermode atomic -coverprofile=covprofile ./...
-      - name: Send coverage
-        env:
-          COVERALLS_PARALLEL: ${{ inputs.coveralls_parallel }}
-          COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          go install github.com/mattn/goveralls@latest
-          goveralls -coverprofile=covprofile -service=github
-        if: github.event_name != 'pull_request'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          coveralls_parallel: ${{ inputs.coveralls_parallel }}
