@@ -4,6 +4,8 @@ inputs:
   coveralls_parallel:
     type: boolean
     default: false
+  github_token:
+    required: true
 runs:
   using: "composite"
   steps:
@@ -22,7 +24,7 @@ runs:
     - name: Send coverage
       env:
         COVERALLS_PARALLEL: ${{ inputs.coveralls_parallel }}
-        COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        COVERALLS_TOKEN: ${{ inputs.GITHUB_TOKEN }}
       run: |
         go install github.com/mattn/goveralls@latest
         goveralls -coverprofile=covprofile -service=github
