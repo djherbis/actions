@@ -19,6 +19,7 @@ runs:
         GOARCH: wasm
         GO111MODULE: auto
       run: go test -covermode=count -coverprofile=profile.cov -exec="$(go env GOROOT)/misc/wasm/go_js_wasm_exec"
+      shell: bash
     - name: Send coverage
       env:
         COVERALLS_PARALLEL: ${{ inputs.coveralls_parallel }}
@@ -26,4 +27,5 @@ runs:
       run: |
         go install github.com/mattn/goveralls@latest
         goveralls -coverprofile=profile.cov -service=github
+      shell: bash
       if: github.event_name != 'pull_request'
