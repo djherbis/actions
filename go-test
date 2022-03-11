@@ -1,0 +1,26 @@
+name: 'Go Test'
+description: 'Runs go test, vet/staticcheck and uploads coverage.'
+inputs:
+  coveralls_parallel:
+    type: boolean
+    default: false
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-go@v2
+      with:
+        go-version: '1.17.x'
+    - run: "go vet ./..."
+    - run: |
+        go install honnef.co/go/tools/cmd/staticcheck@latest
+        staticcheck ./...    
+    - run: go test -v -race -covermode atomic -coverprofile=covprofile ./...
+    - name: Send coverage
+      env:
+        COVERALLS_PARALLEL: ${{ inputs.coveralls_parallel }}
+        COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        go install github.com/mattn/goveralls@latest
+        goveralls -coverprofile=covprofile -service=github
+      if: github.event_name != 'pull_request'
