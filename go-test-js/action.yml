@@ -1,0 +1,29 @@
+name: 'Go Test JS'
+description: 'Runs go test, vet/staticcheck and uploads coverage.'
+inputs:
+  coveralls_parallel:
+    type: boolean
+    default: false
+  github_token:
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-go@v2
+      with:
+        go-version: '1.17.x'
+    - name: go test
+      env:
+        GOOS: js
+        GOARCH: wasm
+        GO111MODULE: auto
+      run: go test -covermode=count -coverprofile=profile.cov -exec="$(go env GOROOT)/misc/wasm/go_js_wasm_exec"
+    - name: Send coverage
+      env:
+        COVERALLS_PARALLEL: ${{ inputs.coveralls_parallel }}
+        COVERALLS_TOKEN: ${{ inputs.GITHUB_TOKEN }}
+      run: |
+        go install github.com/mattn/goveralls@latest
+        goveralls -coverprofile=profile.cov -service=github
+      if: github.event_name != 'pull_request'
