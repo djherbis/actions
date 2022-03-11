@@ -1,10 +1,6 @@
 name: go test
 on:
   workflow_call:
-    inputs:
-      coveralls_parallel:
-        type: boolean
-        default: false
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -13,4 +9,3 @@ jobs:
           uses: djherbis/actions/go-test@main
           with:
             github_token: ${{ secrets.GITHUB_TOKEN }}
-            coveralls_parallel: ${{ inputs.coveralls_parallel }}
