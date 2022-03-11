@@ -25,5 +25,4 @@ runs:
       with:
         path-to-profile: profile.cov
         parallel: ${{ inputs.coveralls_parallel }}
-      shell: bash
       if: github.event_name != 'pull_request'
