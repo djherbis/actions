@@ -19,14 +19,11 @@ runs:
         go install honnef.co/go/tools/cmd/staticcheck@latest
         staticcheck ./...    
       shell: bash
-    - run: go test -v -race -covermode atomic -coverprofile=covprofile ./...
+    - run: go test -v -race -covermode atomic -coverprofile=profile.cov ./...
       shell: bash
     - name: Send coverage
-      env:
-        COVERALLS_PARALLEL: ${{ inputs.coveralls_parallel }}
-        COVERALLS_TOKEN: ${{ inputs.GITHUB_TOKEN }}
-      run: |
-        go install github.com/mattn/goveralls@latest
-        goveralls -coverprofile=covprofile -service=github
-      shell: bash
+      uses: shogo82148/actions-goveralls@v1
+      with:
+        path-to-profile: profile.cov
+        parallel: ${{ inputs.coveralls_parallel }}
       if: github.event_name != 'pull_request'
