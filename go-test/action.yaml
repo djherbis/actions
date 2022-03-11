@@ -2,8 +2,8 @@ name: 'Go Test'
 description: 'Runs go test, vet/staticcheck and uploads coverage.'
 inputs:
   coveralls_parallel:
-    type: string
-    default: ""
+    type: boolean
+    default: false
   github_token:
     required: true
 runs:
