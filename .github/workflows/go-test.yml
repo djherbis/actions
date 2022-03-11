@@ -9,7 +9,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-        uses: djherbis/actions/go-test@main
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          coveralls_parallel: ${{ inputs.coveralls_parallel }}
+        - id: go-test
+          uses: djherbis/actions/go-test@main
+          with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            coveralls_parallel: ${{ inputs.coveralls_parallel }}
